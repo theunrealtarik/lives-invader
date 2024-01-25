@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "NODE_ENV=development concurrently \"tsc -w\" \"nodemon dist/index.js\"",
     "preview": "NODE_ENV=preview ts-node-dev --hot src/index.ts",
-    "start": "prisma generate && NODE_ENV=production node dist/index.js",
+    "start": "NODE_ENV=production node dist/index.js",
     "build": "prisma generate && tsc",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
