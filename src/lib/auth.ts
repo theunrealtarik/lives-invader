@@ -8,6 +8,7 @@ import CredentialsProvider from "@auth/express/providers/credentials";
 
 export const authOptions = {
   adapter: PrismaAdapter(db),
+  trustHost: true,
   providers: [
     CredentialsProvider({
       name: "Life Invaders",
