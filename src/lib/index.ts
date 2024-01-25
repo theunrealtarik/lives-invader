@@ -1,12 +1,16 @@
+import bcrypt from "bcrypt";
+
+const SALT_ROUNDS = 9;
+
 // hashing
 export const crypt = {
   async hash(plainText: string) {
-    return await Bun.password.hash(plainText);
+    return await bcrypt.hashSync(plainText, SALT_ROUNDS);
   },
   async verify(plainText: string, hash: string) {
-    return await Bun.password.verify(plainText, hash);
+    return await bcrypt.compareSync(plainText, hash);
   },
 };
 
-export * from "./database";
-export * from "./auth";
+export * from "./database.js";
+export * from "./auth.js";

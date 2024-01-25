@@ -1,6 +1,6 @@
 import { type Session } from "@auth/express";
 import type { NextFunction, Request, Response } from "express";
-import { authOptions, getAuthSession } from "../lib";
+import { authOptions, getAuthSession } from "../lib/index.js";
 
 export async function authenticatedUser(
   req: Request,

@@ -1,11 +1,10 @@
-import { db } from "./database";
+import { db } from "./database.js";
 
-import type { Request } from "express";
-import { type Session, getSession } from "@auth/express";
+import { getSession } from "@auth/express";
 import { PrismaAdapter } from "@auth/prisma-adapter";
+import type { Request } from "express";
 
 import CredentialsProvider from "@auth/express/providers/credentials";
-import axios from "axios";
 
 export const authOptions = {
   adapter: PrismaAdapter(db),

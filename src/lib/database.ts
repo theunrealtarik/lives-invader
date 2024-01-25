@@ -1,22 +1,7 @@
 import { PrismaClient, User } from "@prisma/client";
-import { PrismaLibSQL } from "@prisma/adapter-libsql";
-import { createClient } from "@libsql/client";
 import type { Request } from "express";
 
-// db
-const libsql = createClient({
-  url: `${process.env.TURSO_DATABASE_URL}`,
-  authToken: `${process.env.TURSO_AUTH_TOKEN}`,
-});
-
-const adapter = new PrismaLibSQL(libsql);
-const options = { adapter } as { adapter?: typeof adapter };
-
-if (process.env.NODE_ENV != "production") {
-  delete options.adapter;
-}
-
-export const db = new PrismaClient(options);
+export const db = new PrismaClient();
 
 // get some user, duh
 export const getUser = async (userId: string) => {

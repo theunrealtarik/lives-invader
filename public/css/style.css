@@ -400,7 +400,7 @@ main > .profile {
 
 /* sign in */
 .auth-page {
-  height: calc(100dvh - 105px);
+  height: calc(100dvh - 117px);
   overflow: hidden;
   display: grid;
   place-content: center;
@@ -700,5 +700,5 @@ img {
 }
 
 .logo img {
-  height: 60px;
+  height: 40px;
 }

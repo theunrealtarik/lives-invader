@@ -1,18 +1,20 @@
-import express, { Request, Response, NextFunction, query } from "express";
-import session from "express-session";
+import dotenv from "dotenv";
+import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
+
 import path from "path";
-import ejs from "ejs";
-import cors from "cors";
-import dotenv from "dotenv";
+import { fileURLToPath } from "url";
+
+globalThis.__filename ??= fileURLToPath(import.meta.url);
+globalThis.__dirname ??= path.dirname(globalThis.__filename);
 
 import ImageKit from "imagekit";
-import { type Message, type User, PrismaClient } from "@prisma/client";
-import { PrismaLibSQL } from "@prisma/adapter-libsql";
-import { createClient } from "@libsql/client";
+
+// const ExpressAuth = import("@auth/express");
 import { ExpressAuth } from "@auth/express";
 
+import multer from "multer";
 import {
   authOptions,
   crypt,
@@ -21,10 +23,8 @@ import {
   getMessage,
   getProfile,
   getUser,
-} from "./lib";
-import { authenticatedUser } from "./middleware";
-
-import multer from "multer";
+} from "./lib/index.js";
+import { authenticatedUser } from "./middleware/index.js";
 
 dotenv.config();
 const env = process.env.NODE_ENV;
@@ -41,7 +41,7 @@ const imagekit = new ImageKit({
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "../public")));
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -53,7 +53,7 @@ app.use(
   }),
 );
 
-app.use(morgan("combined"));
+app.use(morgan("dev"));
 app.use((req, res, next) => {
   res.message = (content: string) => {
     res.render("partials/error", { message: content });
@@ -61,7 +61,7 @@ app.use((req, res, next) => {
 
   next();
 });
-app.set("views", path.join(__dirname, "templates"));
+app.set("views", path.join(__dirname, "../templates"));
 app.set("view engine", "pug");
 app.use("/api/auth/*", ExpressAuth(authOptions));
 
@@ -250,7 +250,6 @@ app.post("/api/sign-up", upload.single("file"), async (req, res) => {
     ).join("");
 
     let image;
-
     if (file && file.buffer.length > 1 * 10 ** 6) {
       res.message("image file is too large");
     } else if (file && file.buffer.length > 0) {
