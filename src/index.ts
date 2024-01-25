@@ -28,7 +28,7 @@ import { authenticatedUser } from "./middleware/index.js";
 
 dotenv.config();
 const env = process.env.NODE_ENV;
-const app = express();
+export const app = express();
 const upload = multer();
 
 const ttl = 1000 * 3600 * 24 * 7;
