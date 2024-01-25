@@ -1,0 +1,21 @@
+doctype html
+html(lang="en")
+  include ../partials/head.pug
+  body
+    nav
+      div
+        include ../partials/logo.pug
+        div
+    .auth-page
+      #sign-up-result
+      .auth-container
+        form(action="/api/auth/callback/credentials", method="post")
+          label
+            input.input(required="true", name="username", type="text", placeholder="USERNAME")
+          label
+            input.input(required="true", name="password", type="password", placeholder="PASSWORD")
+          div
+            a(href="/sign-up") SIGN-UP HERE
+            button.btn.btn-secondary(type="submit") SIGN IN
+          input(type="hidden", name="csrfToken", class="csrf", value="")
+

@@ -1,0 +1,55 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id         String    @id @unique @default(cuid())
+  username   String    @unique
+  password   String
+  created_at DateTime  @default(now())
+  profile    Profile?
+  messages   Message[]
+  comments   Comment[]
+}
+
+model Profile {
+  id           String    @id @unique @default(cuid())
+  user_id      String    @unique
+  user         User?     @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  display_name String
+  image        String?
+  occupation   String
+  relation     String
+  stalking     Profile[] @relation(name: "stalk")
+  stalkers     Profile[] @relation(name: "stalk")
+  created_at   DateTime  @default(now())
+  messages     Message[]
+}
+
+model Message {
+  id         String    @id @unique @default(cuid())
+  content    String
+  profile_id String
+  profile    Profile   @relation(references: [id], fields: [profile_id], onDelete: Cascade)
+  author_id  String
+  author     User      @relation(references: [id], fields: [author_id], onDelete: Cascade)
+  image      String?
+  comments   Comment[]
+  created_at DateTime  @default(now())
+}
+
+model Comment {
+  id         String   @id @unique @default(cuid())
+  content    String
+  author_id  String
+  author     User     @relation(fields: [author_id], references: [id])
+  message_id String
+  message    Message  @relation(references: [id], fields: [message_id], onDelete: Cascade)
+  created_at DateTime @default(now())
+}

@@ -1,0 +1,17 @@
+mixin message(data)
+  - var author = data.author.profile
+  div.message
+    .header
+      include ./avatar.pug
+      +avatar(author)
+      div
+        a(href=`/profile/${data.id}`)
+          p= author.display_name
+        if data.image
+          label Shared an image
+        else
+          label Posted an update
+    if data.image
+      #message-image
+        img(src=data.image)
+    a.content(href=`/profile/${data.id}/messages/${data.id}`)= data.content

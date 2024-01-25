@@ -1,0 +1,17 @@
+include ../partials/head.pug
+body
+  include ../partials/navbar.pug
+  main.search-page
+    form(action="/search", method="GET")
+      input(placeholder="Search for friends...", name="q")
+      button.btn.btn-primary(type="submit") SEARCH
+    if data && data.length > 0
+      br/
+      .profiles 
+        each profile in data
+          include ../components/user.pug
+          +user(profile)
+    else
+      .error
+        p no users were found
+

@@ -1,0 +1,138 @@
+doctype html
+html(lang="en")
+  include ../partials/head.pug
+  include ../components/avatar.pug
+  body
+    nav
+      div
+        include ../partials/logo.pug
+        form(action="/api/auth/signout", method="POST")
+          input(type="hidden", name="csrfToken", class="csrf")
+          button.btn.btn-secondary(type="submit") LOG OUT
+
+    - var lastStalking = data.stalking[data.stalking.length - 1]
+    - var lastStalker = data.stalkers[data.stalkers.length - 1]
+    - var lastPhoto = data.photos[data.photos.length - 1]
+    main
+      .profile
+        .header
+          .pfp
+            if data.image
+              img(src=data.image, alt="")
+            else
+              img(src="/images/unknown.webp", alt="")
+            
+            if user.profile_id != data.id
+              div
+                a(href=`/profile/${user.profile_id}`) Back to My Profile
+          .details
+            div.username#messages.tab(style="cursor:pointer;")
+              h2= data.display_name
+              if !user.is_local && !user.is_stalking
+                  button(
+                    class="btn btn-primary",
+                    hx-post=`/api/stalk/${data.id}`,
+                    hx-swap="outerHTML",
+                    hx-target="#stalk-btn", 
+                    id="stalk-btn") STALK
+            .bio
+              p Occupation: #{data.occupation}
+              p Relationship Status: #{data.relation}
+            .connections.ch
+              figure#photos
+                if lastPhoto
+                  img(src=lastPhoto.image)
+                else
+                  img(src="/images/unknown.webp", alt="")
+                figcaption#type Photos
+              figure.tab#friends
+                +avatar(lastStalking)
+                figcaption#type Stalking 
+              figure.tab#stalkers
+                +avatar(lastStalker)
+                figcaption#type Stalkers
+
+        .footer
+          .connections.cv
+            div.profiles-lookup
+              if user.is_local
+                form.header(action=`/search`, method="GET")
+                  input(required="true", name="q", placeholder="find people ...")
+                  button(class="btn btn-primary") SEARCH
+            if data.stalking.length !== 0
+              figure
+                h4
+                  span#type Stalking
+                  span#count= data.stalking.length
+                div
+                  +avatar(lastStalking)
+                  figcaption= lastStalking.display_name
+            if data.stalkers.length !== 0
+              figure
+                h4
+                  span#type Stalkers
+                  span#count= data.stalkers.length
+                div
+                  if lastStalker
+                    +avatar(lastStalker)
+                  figcaption= lastStalker.display_name
+          #container
+            #messages.tab-content
+              if user.is_local || user.is_stalking
+                h4 Messages
+                form(
+                  hx-post=`/api/create-message/${data.id}`, 
+                  hx-target="#new-message", 
+                  hx-swap="afterend", 
+                  hx-encoding="multipart/form-data",
+                  class="create-message reset-form", 
+                )
+                  textarea(placeholder="say anything...", maxLength="200", required="true", name="content")
+                  div
+                    input(name="image", type="file", class="input-file", accept="image/png, image/jpeg")
+                    button(class="btn btn-primary") SEND 
+              div#content
+                div#new-message(hidden="true")
+                include ../components/message.pug
+                each message in data.messages
+                  +message(message)
+            #friends.tab-content
+              h4 Stalking 
+              div#content
+                include ../components/user.pug
+                each stalking in data.stalking
+                  +user(stalking) 
+            #stalkers.tab-content
+              h4 Stalkers
+              div#content
+                include ../components/user.pug
+                each stalker in data.stalkers
+                  +user(stalker)
+      .sponsors
+        h5 sponsored adverts
+        .sponsor
+        .sponsor
+        .sponsor
+  dialog(id="photos-modal")
+    .container
+      if !lastPhoto
+        .error No photos
+      else
+        #slider-container
+          #slider
+            each photo in data.photos
+              .slide 
+                img(src=photo.image)
+          button(class="slider-buttons", id="next")
+            img(src="/images/right.png")
+          button(class="slider-buttons", id="prev")
+            img(src="/images/left.png")
+        #message
+          .header
+            +avatar(data)
+            p= data.display_name
+          .content
+            each photo in data.photos
+              p.description(style="display:none;")= photo.content
+      button(id="photos-close") x
+  script(src="/scripts/profile.js")

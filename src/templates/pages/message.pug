@@ -1,0 +1,45 @@
+include ../components/message.pug
+include ../components/avatar.pug
+include ../partials/head.pug
+
+body
+  include ../partials/navbar.pug
+  main.message-page
+    - var author = data.author.profile
+    div.message
+      .header
+        +avatar(author)
+        div
+          a(href=`/profile/${data.author_id}`)
+            p= author.display_name
+          if data.image
+            label Shared an image
+          else
+            label Posted an update
+      if data.image
+        #message-image
+          img(src=data.image)
+      .content(href=`/profile/${data.author_id}/messages/${data.id}`)= data.content
+      div.create-comment-container
+        div.actions
+          a Stalk
+          a Comment
+          a Share
+        form(
+          hx-post=`/api/comments/${data.id}/create`, 
+          hx-target="#comment-result", 
+          hx-swap="afterend",
+          class="reset-form")
+          +avatar(user)    
+          input(placeholder="Write a comment...", name="content", maxLength="100")
+    br/ 
+    if data.comments.length != 0
+      h4 Comments
+    div.comments
+      #comment-result(hidden="true")
+      each comment in data.comments
+        .comment
+          .header
+            +avatar(comment.author.profile)
+            a(href=`/profile/${comment.author_id}`)= comment.author.profile.display_name
+          p.content= comment.content

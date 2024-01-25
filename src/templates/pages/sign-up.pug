@@ -1,0 +1,33 @@
+doctype html
+html(lang="en")
+  include ../partials/head.pug
+  body
+    nav
+      div
+        include ../partials/logo.pug
+        div
+    .auth-page
+      #sign-up-result
+      .auth-container
+        form(
+          class="sign-up", 
+          id="sign-up-form", 
+          hx-post="/api/sign-up", 
+          hx-target="#sign-up-result", 
+          hx-swap="innerHTML", 
+          hx-encoding="multipart/form-data")
+          .fields
+            .text
+              input(required="true", placeholder="USERNAME", name="username", class="input", type="text")
+              input(required="true", placeholder="DISPLAY NAME", name="displayName", class="input", type="text")
+              input(required="true", placeholder="PASSWORD", name="password", class="input", type="password")
+              input(required="true", placeholder="OCCUPATION", name="occupation", class="input", type="option")
+              input(required="true", placeholder="RELATIONSHIP STATUS", name="relation", class="input", type="text")
+            .pfp
+              img#image-preview(src="/images/unknown.webp")
+              input#image-input(hidden="true", type="file", name="file", class="image-input", accept="image/png, image/jpeg")
+              progress(id='progress', value='0', max='100')
+          div
+            a(href="/sign-in") SIGN-IN HERE
+            button.btn.btn-secondary(type="submit") SIGN UP
+  script(src="/scripts/sign-up.js")

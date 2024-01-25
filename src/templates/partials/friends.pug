@@ -1,0 +1,7 @@
+include ../components/user.pug
+
+#messages.tab-content
+  h4= title 
+  div#content
+    each friend in data
+      +user(friend.profile)

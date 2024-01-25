@@ -1,0 +1,9 @@
+
+nav
+  div
+    include ../partials/logo.pug
+    form(action="/api/auth/signout", method="POST")
+      input(type="hidden", name="csrfToken", class="csrf")
+      button.btn.btn-secondary(type="submit") LOG OUT
+
+

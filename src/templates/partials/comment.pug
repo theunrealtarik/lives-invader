@@ -1,0 +1,6 @@
+.comment
+  .header
+    include ../components/avatar.pug
+    +avatar(data.author.profile)
+    a(href=`/profile/${data.author_id}`)= data.author.profile.display_name
+  p.content= data.content

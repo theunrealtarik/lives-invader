@@ -1,0 +1,8 @@
+mixin user(profile)
+  .user
+    if profile.image
+      img(src= profile.image)
+    else
+      img(src="/images/unknown.webp")
+    a(href=`/profile/${profile.id}`)
+      p= profile.display_name

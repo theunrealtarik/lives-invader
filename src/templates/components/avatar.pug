@@ -1,0 +1,5 @@
+mixin avatar(profile)
+  if profile && profile.image
+    img(src= profile.image)
+  else
+    img(src="/images/unknown.webp")
