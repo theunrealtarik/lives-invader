@@ -699,3 +699,7 @@ img {
 .search-page form input {
   flex: 1;
 }
+
+.logo img {
+  height: 60px;
+}

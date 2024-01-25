@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "NODE_ENV=development bun --hot src/server.ts",
     "preview": "NODE_ENV=preview bun --hot src/server.ts",
-    "start": "NODE_ENV=production bun run src/server.ts",
+    "start": "prisma generate && NODE_ENV=production bun run src/server.ts",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio"
