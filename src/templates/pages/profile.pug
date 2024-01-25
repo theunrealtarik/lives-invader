@@ -110,9 +110,10 @@ html(lang="en")
                   +user(stalker)
       .sponsors
         h5 sponsored adverts
-        .sponsor
-        .sponsor
-        .sponsor
+        a.sponsor(href="https://www.lifeinvader.com/", target="_blank")
+          img(src="/images/sponsors/lifeinvader.png")
+        a.sponsor(href="https://github.com/Txreq/lives-invader", target="_blank")
+          img(src="/images/sponsors/repo.png")
   dialog(id="photos-modal")
     .container
       if !lastPhoto
